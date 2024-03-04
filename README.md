@@ -3,12 +3,12 @@
 This project is a web application that allows users to create, view, and review restaurant listings.
 
 # Table of Contents
-Installation: #installation
-Usage: #usage
-Features: #features
-Technologies: #technologies
-Contributing: #contributing
-License: #license
+Installation
+Usage
+Features
+Technologies
+Contributing
+License
 
 # Installation
 1. Prerequisites: Node.js (version 16 or above) and npm. You can download them from https://nodejs.org
