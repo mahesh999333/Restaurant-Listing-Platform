@@ -3,7 +3,7 @@ const Business = require('../models/business')
 const User = require("../models/user")
 const Review = require("../models/review")
 const {CREATELISTINGROLE, UPDATELISTINGROLE, DELETELISTINGROLE} = require("../config/config")
-const {validateCreateListing, validateUpdateListing} = require("../utils/validation")
+const {validateCreateListing, validateUpdateListing, isValidId} = require("../utils/validation")
 
 
 const createListing = async (req, res) => {
@@ -79,6 +79,7 @@ const updateListing = async (req, res) => {
 
         let {name, phone, city, address, images, ownerName} = req.body
         let userId = req.user._id
+        let listingId = req.params.listingId
         let update = {}
         if (name) update.name = name
         if (phone) update.phone = phone
@@ -86,8 +87,17 @@ const updateListing = async (req, res) => {
         if (address) update.address = address
         if (images) update.images = images
 
+        // filter criteria
+        let filter = {}
+        if (req.user.role == "ADMIN"){
+            filter["_id"] = listingId
+        }else{
+            filter["_id"] = listingId
+            filter["owner"] = userId
+        }
+
         // updating business listing
-        const updatedBusiness = await Business.findOneAndUpdate({owner:userId, isDeleted:false}, update, { new: true }).select({_id:0, __v:0, isDeleted:0})
+        const updatedBusiness = await Business.findOneAndUpdate(filter, update, { new: true }).select({_id:0, __v:0, isDeleted:0})
         if (!updatedBusiness) {
             return res.status(404).json({ message: 'Business listing not found.' });
         }
@@ -113,7 +123,7 @@ const deleteListing = async (req, res) => {
     try {
         // validating role
         if (!DELETELISTINGROLE.includes(req.user.role)) {
-            return res.status(403).json({ message: 'Unauthorized. Only Business Owners and Admin can delete listings.' });
+            return res.status(403).json({ message: 'Unauthorized. Only Admin can delete listings.' });
         }
 
         const listingId = req.params.listingId

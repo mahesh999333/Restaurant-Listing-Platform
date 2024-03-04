@@ -1,4 +1,5 @@
 const Review = require('../models/review')
+const Business = require('../models/business')
 const {REVIEWROLE, REVIEWRESPONSEROLE} = require("../config/config")
 const {validatingReview, isValidId} = require("../utils/validation")
 
@@ -13,8 +14,19 @@ const creatReview = async (req, res) => {
             return res.status(403).json({message: "Only user and admin allowed to review"})
         }
 
+        // validating businessId or listingId
+        if (!isValidId(business)){
+            return res.status(400).json({message:"invalid business id"}) 
+        }
+
+        // check if business exist or not
+        let isBusinessExist = await Business.findById(business)
+        if (!isBusinessExist){
+            return res.status(404).json({message:"Business not found."})
+        }
+
         // Review data validation
-        const { error } = validatingReview(req.body);
+        const error = validatingReview(req.body);
         if (error) return res.status(400).json({ message: error.details[0].message })
 
         let {rating, comment} = req.body

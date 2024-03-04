@@ -5,7 +5,7 @@ const authMiddleware = require("../middleware/authMiddleware")
 
 router.post("/add", authMiddleware, createListing),
 router.get('/get', authMiddleware, getAllListings),
-router.put('/updateDetails', authMiddleware, updateListing),
+router.put('/updateDetails/:listingId', authMiddleware, updateListing),
 router.delete('/delete/:listingId', authMiddleware, deleteListing)
 
 
