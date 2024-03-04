@@ -12,7 +12,7 @@ License: #license
 
 # Installation
 1. Prerequisites: Node.js (version 16 or above) and npm. You can download them from https://nodejs.org
-2. Clone the repository: 
+2. Clone the repository: https://github.com/mahesh999333/Restaurant-Listing-Platform.git
 3. Install dependencies: npm install
 
 # Usage 
